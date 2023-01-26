@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.2.0/redux.min.js"></script>
+</head>
+<body>
+    <h1 id="number">0</h1>
+    <button id="increment">+ 1</button>
+    <button id="decrement">- 1</button>
+    <script>
+        // 초기 상태 값 설정
+        const initalState = {
+            number: 0
+        }
+        // reducer함수 작성
+        function reducer(state=initalState, action) {
+            // // 초기 상태 값 설정
+            // if(state === undefined) {
+            //     return {number: 0}
+            // }
+            // 상태 업데이트 될 경우 작성
+            switch(action.type) {
+                case 'INCREMENT':
+                    return {
+                        ...state,
+                        number: state.number + action.add
+                    };
+                case 'DECREMENT':
+                    return {
+                        ...state,
+                        number: state.number - 1
+                    };
+                default:
+                    return state;
+            }
+        }
+        // action객체를 만들어주는 action생성 함수 작성
+        // 객체를 리턴할 때는 return키워드 생략, {}생략 시, ()로 감싸준다.
+        const increment = (add) => ({type: 'INCREMENT', add: add}) 
+        const decrement = () => ({type: 'DECREMENT'})
+        // 스토어 만들기
+        const store = Redux.createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+        // 변수 지정
+        const numberEle = document.querySelector("#number");
+        const increBtn = document.querySelector("#increment");
+        const decreBtn = document.querySelector("#decrement");
+        // 상태가 변경될 때마다 호출시킬 함수 작성
+        const render = () => {
+            numberEle.innerHTML = store.getState().number; // 상태의 number라는 key값에 접근
+            console.log('render호출됨.');
+        }
+        // 스토어에 구독을 하고, 상태변화가 있으면 render함수 호출
+        store.subscribe(render);
+        // 이벤트 연결
+        increBtn.addEventListener("click", () => {
+            store.dispatch(increment(1));
+        })
+        decreBtn.addEventListener("click", () => {
+            store.dispatch(decrement());
+        })
+    </script>
+</body>
+</html>
