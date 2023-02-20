@@ -16,6 +16,7 @@
 <body>
     <div id="red"></div>
     <div id="blue"></div>
+    <div id="yellow"></div>
     <script>
         // 1. reducer 함수 만들기
         function reducer(state, action) {
@@ -63,6 +64,19 @@
         }
         store.subscribe(blue);
         blue();
+
+        function yellow() {
+            let state = store.getState();
+            document.querySelector("#yellow").innerHTML = `
+                <div class='component' style='background-color: ${state.color}'>
+                    <h1>yellow</h1>
+                    <button onclick="store.dispatch({type: 'CHANGE_COLOR', color: 'yellow'})">
+                    Button</button>
+                </div>
+            `;
+        }
+        store.subscribe(yellow);
+        yellow();
     </script>
 </body>
 </html>
